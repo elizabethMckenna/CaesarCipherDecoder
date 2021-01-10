@@ -1,0 +1,209 @@
+/***************************************************************************/
+                                  README
+/***************************************************************************/
+
+Student: Elizabeth McKenna
+Guelph ID: 1053037
+Course: CIS*2500
+Due Monday March 9, 8:30 am
+
+
+/***************************************************************************/
+                                  QUESTION 1
+                               frequency_table
+/***************************************************************************/
+
+The purpose of this program is to create an array of integers representing the
+number of occurrences of each letter within a portion of text.
+
+When running the program, a possible command line flag for use is the "-F", which
+immediately precedes (with or without a space) a filename, which will be used to
+calculate the frequency of each letter within the text.
+
+The output of the program is the total number of letters in the text, and the
+total number of characters within the text. The table of each letter and its
+frequency is then labeled and printed, one letter to a line.
+
+Assumptions: ********************
+  The total number of characters in the text count does not include the
+  terminating character.
+
+  Any other information on the command line should be disregarded.
+
+
+  /***************************************************************************/
+                                    QUESTION 2
+                                      decode
+  /***************************************************************************/
+
+The purpose of this program is to use the average letter frequencies within
+the English language to try to determine what shift of a Ceasar cipher that
+was used on a piece of text.
+
+The program has 7 possible flags that can be specified on the command line.
+
+  "-F":
+  This flag immediately precedes (with or without a space) a filename, which will
+  be used as the input file.  Text is read from this file and is used to perform
+  a series of operations to determine the most likely shift of a ceasar cipher
+  that was applied to it.
+  If this flag is missing, text input is read from stdin, and will stop looking
+  when ^d is typed.
+
+  "-O":
+  This flag immediately precedes (with or without a space) a filename, which will
+  be used as the output file.  The name specified after this flag will be used as
+  the name of the output file in which the decipered text will be placed at the
+  end of the program.
+  If this flag is missing, text output will be written to stdout, after all other
+  information that might be printed with the other flags.
+
+  "-n":
+  This flag suppresses the printing of the decoded file to stdout.  This flag
+  does nothing when used in conjunction with the "-O" flag, but when "-O" flag
+  is not present, nothing is printed to stdout.
+
+  "-s":
+  This flag prints the shift value of the ceasar cipher used to DECODE the text,
+  and prints the shift value labeled on its own line.
+
+  "-S":
+  This flag prints the shift value of the ceasar cipher used to ENCODE the text,
+  and prints the shift value labeled on its own line.
+
+  "-t":
+  This flag prints a letter frequency summary like what was done in question 1.
+  The character count, letter count, and frequency of each letter is printed to
+  stdout. The table will be printed immediately before the decoded message.
+
+  "-x":
+  This flag prints the chi-squared values for all possible shifts, as well as the
+  value of the shift that was used, each on its own line.
+
+  Solution Explanation: *************************************
+
+  The first step to this problem was to read the command line arguments and
+  determine what flags are present and the names of files that are going to be
+  used to determine and output the shift.
+
+  The next step is to deal with the input... if the "-F" was used, then the file
+  was read from using the listed name and a frequency table was created for the
+  alphabetical characters in the file.  If no file was provided, the user can
+  input text to stdin, which was placed into a temporary file, and treated as if
+  it were a file listed in the command line.
+
+  After getting the frequency of each letter, the chi-squared formula was applied
+  to each possible shift of the ceasar cipher to find the best guess of waht shift
+  was used when shifting the ceasar cipher from English. If the smallest shift
+  value found was within the suitable range of error (< 0.5), the program
+  determined that that was the shift used to encode the text.
+
+  The next portion of the code determines what should be printed to stdout based
+  on the flags provided on the command line.
+
+  The output of the program depends on two variables.
+    1) if a suitable shift was found,and
+    2) if the "-O" flag was included in command LINE
+
+  if a suitable shift was found, the output of the program is shifted by that value
+  (in the other direction), to return the decoded message of the text.
+  if no suitable shift was found, the data sample was either too small to
+  effectively calculate the frequencies, or the original text was not in English
+  to begin with.
+
+  If the "-O" flag is present on the command line, then the deciphered text is
+  written to a file with the specified name.  If no flag is present, then the
+  deciphered text is printed to stdout after all other output.
+
+  Assumptions: ********************
+
+  The total number of characters does not include the terminating character in
+  the total count.
+
+  Any extra information of the command line should be disregarded
+
+  There is not a requirement for the minimum size of teh text to be 200 characters
+  long, interpreting the comment on the assignment sheet as a suggestion to get
+  accurate values from the chi-squared formula. If text sample is too short, the
+  chi-squared formula may not find a best_shift, so will simply return a shift of
+  zero, like any other case where no suitable shift value is found.
+
+  I did not use the functions encode_shift and to_decode shift, as these were added
+  in the updated version of the assignment.... I have similar functions, however
+  this portion of the assignment was already completed when the modification was
+  released, and I did not have the chance to redo how the functions interact with
+  one another and with the mainline.  The final result is the same, however I got
+  there in a slightly modified way, but the program works, so please don't be too
+  picky (please).
+
+  I know there are (a lot of) memory leaks here, I think it has to do with my
+  file pointers.  I ran out of time to figure it out. Sorry
+
+
+  /***************************************************************************/
+                                    QUESTION 3
+                                    copyrecords
+  /***************************************************************************/
+
+  The purpose of this program is to read a series of structure in from a binary
+  file, change the string elements by shifting by a found value, and placing the
+  decoded structures into another binary file.
+
+  Each record has the structure of a string, up to 24 characters long, 24 double
+  values, a string, up to 144 characters long, and 12 integer values.
+
+  The program has 4 possible flags that can be specified on the command line.
+
+  "-F":
+  This flag immediately precedes (with or without a space) a filename, which will
+  be used as the input file. This file should be a binary file that contains the
+  records of the specified format.  if no input file is provided, the program
+  will print and error message and terminate running.  (as was specified by the
+  professor during the lecture on March 6).
+
+  "-O":
+  This flag immediately precedes (with or without a space) a filename, which will
+  be used as the output file. This file will be a binary file that contains the
+  records of the specified format.  If the records are encrypted, they are now
+  deciphered. If no input file is provided, the program will print and error
+  message and terminate running.  (as was specified by the professor during the
+  lecture on March 6).
+
+  "-D":
+  This flag immediately precedes (with or without a space) a filename, which will
+  be used as the companion file used to find the shift value to be used on the
+  structures text fields to decipher them. This file will be a text file.
+  If this flag is excluded, program runs most of the way (still does everything),
+  but gets mad because I don't have the if statements to close files only if they
+  exist)
+
+  "-r":
+  This flag will cause the records to be read into the output file in reverse
+  order.
+
+  Method of Reversing Record Order: ************************
+
+  When reading files in forwards order, the stream is managed by reading from
+  the beginning of the text, and reading in structure sized chunks to a structure
+  with the listed elements.  Then deciphering the text fields, and appending the
+  record that was just read to the output file.
+  When reading the files in reverse order, the management of the stream becomes
+  more complicated, because you must start one structure sized chunk away from
+  the end of the file.  Once this location in the stream is reached for reading
+  the first record, you must read forwards from your location one structure-sized
+  chunk of data.  The tricky bit is that the location in the stream is at the end
+  of the chunk you just read, so you must then go back TWO structure-sized chucks,
+  then one chunk forwards from the new location. When the location in the file is
+  at the start again (when restarting the loop), you are at the second last record.
+  To get the last record, I had to get it separately after my while loop had
+  terminated. The process of converting and changing is identical to reading from
+  the start, only this time using the structures going end to start from the
+  input file.  Each new record is then appending to the output file until the
+  process is complete.
+
+  Assumptions:  ********************
+
+  The input file will be in binary and the companion file will be a text file.
+
+  The input file will contain proper information to be stored into the record
+  structures.
